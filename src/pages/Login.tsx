@@ -1,11 +1,14 @@
 import { ChangeEventHandler, useCallback, useState } from "react";
+import { useNavigate } from "react-router";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import login from "../helpers/login";
 
 function Login() {
+  const nav = useNavigate();
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -37,8 +40,9 @@ function Login() {
       return;
     }
 
-    console.log(data);
-  }, [formValues]);
+    login(data.token);
+    nav("/dashboard");
+  }, [formValues, nav]);
 
   return (
     <Box
