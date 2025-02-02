@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Avatar from "@mui/material/Avatar";
-import { Skeleton } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 
 interface IUserData {
   id: number;
