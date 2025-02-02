@@ -8,14 +8,9 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Avatar from "@mui/material/Avatar";
 import Skeleton from "@mui/material/Skeleton";
-
-interface IUserData {
-  id: number;
-  avatar: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-}
+import { Button } from "@mui/material";
+import { type IUserData } from "../types";
+import DeleteDialog from "../dialogs/DeleteDialog";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,10 +19,18 @@ const Dashboard = () => {
   const [perPage, setPerPage] = useState(0);
   const [total, setTotal] = useState(0);
   // const [totalPages, setTotalPages] = useState(0);
+  const [userToDelete, setUserToDelete] = useState<IUserData | undefined>();
 
   const handlePageChange = useCallback((_event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
+
+  const handleDelUser = useCallback(
+    (usr: IUserData) => () => {
+      setUserToDelete(usr);
+    },
+    []
+  );
 
   useEffect(() => {
     (async () => {
@@ -56,6 +59,7 @@ const Dashboard = () => {
               <TableCell>First Name</TableCell>
               <TableCell>Last Name</TableCell>
               <TableCell>Email</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -64,6 +68,9 @@ const Dashboard = () => {
                 <TableRow key={i} hover role="checkbox" tabIndex={-1}>
                   <TableCell>
                     <Skeleton variant="circular" width={40} height={40} />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
                   </TableCell>
                   <TableCell>
                     <Skeleton variant="text" />
@@ -85,6 +92,11 @@ const Dashboard = () => {
                   <TableCell>{usr.first_name}</TableCell>
                   <TableCell>{usr.last_name}</TableCell>
                   <TableCell>{usr.email}</TableCell>
+                  <TableCell>
+                    <Button color="error" onClick={handleDelUser(usr)}>
+                      Del
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -97,6 +109,10 @@ const Dashboard = () => {
         rowsPerPage={perPage}
         page={page}
         onPageChange={handlePageChange}
+      />
+      <DeleteDialog
+        userToDelete={userToDelete}
+        onClose={() => setUserToDelete(undefined)}
       />
     </>
   );
