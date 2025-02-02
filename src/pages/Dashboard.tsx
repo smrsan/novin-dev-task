@@ -32,22 +32,24 @@ const Dashboard = () => {
     []
   );
 
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
+  const loadPageData = useCallback(async () => {
+    setIsLoading(true);
 
-      const res = await fetch(`https://reqres.in/api/users?page=${page + 1}`, {
-        cache: "no-cache",
-      });
-      const result = await res.json();
+    const res = await fetch(`https://reqres.in/api/users?page=${page + 1}`, {
+      cache: "no-cache",
+    });
+    const result = await res.json();
 
-      setUsersList(result.data);
-      setPerPage(result.per_page);
-      setTotal(result.total);
-      // setTotalPages(result.total_pages);
-      setIsLoading(false);
-    })();
+    setUsersList(result.data);
+    setPerPage(result.per_page);
+    setTotal(result.total);
+    // setTotalPages(result.total_pages);
+    setIsLoading(false);
   }, [page]);
+
+  useEffect(() => {
+    loadPageData();
+  }, [loadPageData]);
 
   return (
     <>
